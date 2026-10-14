@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "powershell -ExecutionPolicy Bypass -File ./scripts/deploy-pages.ps1"
   },
   "dependencies": {
     "@types/better-sqlite3": "^9.6.0",
