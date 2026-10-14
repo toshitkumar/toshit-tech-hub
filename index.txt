@@ -1,0 +1,138 @@
+2:I[5854,["802","static/chunks/802-97b1fa4e24aad139.js","931","static/chunks/app/page-6f1e4c8da18ee88f.js"],"default"]
+6:I[6477,["802","static/chunks/802-97b1fa4e24aad139.js","185","static/chunks/app/layout-7609ead81d7d10ad.js"],"default"]
+7:I[4707,[],""]
+8:I[6423,[],""]
+9:I[5466,["802","static/chunks/802-97b1fa4e24aad139.js","185","static/chunks/app/layout-7609ead81d7d10ad.js"],"default"]
+a:I[2972,["802","static/chunks/802-97b1fa4e24aad139.js","185","static/chunks/app/layout-7609ead81d7d10ad.js"],""]
+3:T597,# Building Autonomous AI Agents with Local LLMs
+
+Autonomous AI agents are changing the way software interacts with the real world. In this tutorial, we will construct a lightweight agent framework that connects a locally hosted model with external tools.
+
+## Architecture Overview
+The agent operates in a continuous loop:
+1. **Perception**: Takes the user goal and conversational history.
+2. **Reasoning**: Decides which specialized tool (web search, calculator, terminal) to invoke.
+3. **Execution**: Executes the tool call safely and reads the output.
+4. **Synthesis**: Delivers the final response or iterates.
+
+```python
+import requests
+import json
+
+class SimpleLocalAgent:
+    def __init__(self, model_name="llama3"):
+        self.model = model_name
+        self.tools = {
+            "calculator": lambda expr: eval(expr, {"__builtins__": None}, {})
+        }
+
+    def run(self, user_prompt):
+        print(f"[*] Processing user prompt: {user_prompt}")
+        # Local inference logic here
+        return "Agent executed successfully!"
+
+agent = SimpleLocalAgent()
+agent.run("Calculate square root of 256")
+```
+
+## Key Takeaways
+- **Zero Cloud Costs**: By utilizing local quantized models via Ollama or vLLM, you maintain 100% data privacy.
+- **Strict Function Signatures**: Always enforce JSON schemas for reliable output generation.
+- Stay tuned for Part 2 where we attach Arduino telemetry data into our AI reasoning engine!4:T855,# ESP32 Smart IoT Weather Station with OLED & Blynk 2.0
+
+In this project, we will construct a complete wireless weather station powered by the **ESP32 microcontroller**, transmitting temperature, humidity, and barometric pressure directly to a mobile dashboard.
+
+## 🛠️ Required Components
+- **ESP32 NodeMCU Development Board**
+- **DHT22 / AM2302** (High-precision temperature & humidity sensor)
+- **BMP280** (Barometric pressure sensor via I2C)
+- **0.96" I2C SSD1306 OLED Display** (128x64 pixels)
+- **Breadboard & Jumper Wires**
+
+---
+
+## ⚡ Circuit Schematic & Pin Connections
+
+| ESP32 Pin | Component Pin | Function |
+| :--- | :--- | :--- |
+| **GPIO 21 (SDA)** | OLED SDA & BMP280 SDA | I2C Data Line |
+| **GPIO 22 (SCL)** | OLED SCL & BMP280 SCL | I2C Clock Line |
+| **GPIO 4** | DHT22 DATA | Digital Sensor Signal |
+| **3V3** | VCC Pins | Power (3.3V) |
+| **GND** | GND Pins | Ground Rail |
+
+---
+
+## 💻 Arduino C++ Firmware Code
+
+```cpp
+#include <WiFi.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <DHT.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define DHTPIN 4
+#define DHTTYPE DHT22
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;);
+  }
+  
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 10);
+  display.println("Toshit's Weather Station");
+  display.display();
+  delay(1500);
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum = dht.readHumidity();
+
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.print("Temp: ");
+  display.print(temp);
+  display.println(" C");
+
+  display.setCursor(0, 20);
+  display.print("Humidity: ");
+  display.print(hum);
+  display.println(" %");
+  display.display();
+
+  delay(2000);
+}
+```
+
+## Calibration Tips
+Make sure to add a 10k pull-up resistor between VCC and the DHT22 data line if your breakout board does not already include one!5:T433,# Designing Your First Custom PCB
+
+Moving your electronics project from a breadboard to a production-grade printed circuit board (PCB) is one of the most rewarding milestones for any maker.
+
+## 1. Schematic Design Rules
+- **Decoupling Capacitors**: Place a 100nF ceramic capacitor as close as physically possible to the VCC pin of every IC.
+- **Label Nets**: Instead of drawing messy wires across your schematic sheet, use named net flags (`VCC`, `GND`, `SDA`, `SCL`).
+- **Power Polarity Protection**: Add a Schottky diode (e.g., 1N5819) on the DC input to prevent accidental reverse polarity disaster.
+
+## 2. PCB Layout Best Practices
+1. **Trace Widths**:
+   - Signal lines: 0.25mm - 0.3mm (10-12 mils)
+   - Power traces (3.3V/5V): 0.6mm - 1.0mm (24-40 mils)
+2. **Ground Planes**: Always fill both Top and Bottom copper layers with a Ground (GND) pour. This reduces electromagnetic interference (EMI) and provides clean return paths.
+3. **Corner Angles**: Avoid 90-degree right angles in traces. Use 45-degree chamfered bends to minimize signal reflection and etching traps.0:["7EsmEqhKF6g71jrSE9e2j",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],["",{"children":["__PAGE__",{},[["$L1",["$","$L2",null,{"initialArticles":[{"id":1,"slug":"building-autonomous-ai-agents-python","title":"Building Autonomous AI Agents with Local LLMs and Tool Calling in Python","category":"AI","excerpt":"Step-by-step guide on orchestrating multi-agent systems using Ollama, LangChain, and custom API function calling with zero cloud cost.","content":"$3","cover_image":"https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1200&q=80","tags":"ai, python, agents, ollama, llm","author":"Toshit Kumar","read_time":"6 min read","featured":1,"views":146,"created_at":"2026-10-14 07:32:54","updated_at":"2026-10-14 07:32:54"},{"id":2,"slug":"esp32-iot-weather-station-oled-blynk","title":"ESP32 Smart IoT Weather Station with OLED & Blynk 2.0 Cloud Integration","category":"Arduino","excerpt":"Build a portable real-time environmental monitor with DHT22, BMP280, 0.96-inch I2C OLED display, and smartphone notifications.","content":"$4","cover_image":"https://images.unsplash.com/photo-1553406830-ef2513450d76?auto=format&fit=crop&w=1200&q=80","tags":"arduino, esp32, iot, sensors, oled","author":"Toshit Kumar","read_time":"8 min read","featured":1,"views":295,"created_at":"2026-10-14 07:32:54","updated_at":"2026-10-14 07:32:54"},{"id":3,"slug":"custom-pcb-design-easyeda-jlcpcb-guide","title":"Designing Your First Custom PCB: From EasyEDA to Fabrication","category":"Electronics","excerpt":"Say goodbye to messy breadboards. A comprehensive walkthrough of schematic capture, PCB layout, trace width calculation, and ordering.","content":"$5","cover_image":"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80","tags":"electronics, pcb, hardware, circuits, fabrication","author":"Toshit Kumar","read_time":"7 min read","featured":0,"views":199,"created_at":"2026-10-14 07:32:54","updated_at":"2026-10-14 07:32:54"},{"id":4,"slug":"davinci-resolve-vs-premiere-pro-2026-workflow","title":"DaVinci Resolve vs Premiere Pro: The Ultimate 4K YouTube Creator Workflow","category":"Editing","excerpt":"Which video editor is best for tech tutorials and high-speed editing? Breakdown of rendering benchmarks, Fusion motion graphics, and audio mastering.","content":"# DaVinci Resolve vs Premiere Pro in 2026\n\nFor content creators producing technical tutorials and high-paced YouTube videos, timeline performance and color accuracy are essential.\n\n## Key Comparison Matrix\n\n| Feature | DaVinci Resolve Studio | Adobe Premiere Pro |\n| :--- | :--- | :--- |\n| **Color Grading** | World-class Node-based grading | Lumetri Color (Layer-based) |\n| **Motion Graphics** | Built-in Fusion | After Effects Dynamic Link |\n| **Audio Processing** | Fairlight DAW built-in | Essential Sound / Audition |\n| **Pricing Model** | One-time lifetime license ($295) | Monthly subscription |\n| **Hardware Decoding** | Incredible GPU optimization | Great Mercury Playback Engine |\n\n## Recommended Export Settings for YouTube (Tech Videos)\n- **Container**: MP4\n- **Codec**: H.265 / HEVC or AV1 (if your GPU supports hardware encode)\n- **Resolution**: 3840 x 2160 (Upscale 1080p footage to 4K to force YouTube's high-bitrate VP09/AV01 codec)\n- **Audio**: AAC, 320 kbps, 48kHz Stereo","cover_image":"https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&q=80","tags":"editing, video, premiere, davinci, youtube","author":"Toshit Kumar","read_time":"5 min read","featured":0,"views":316,"created_at":"2026-10-14 07:32:54","updated_at":"2026-10-14 07:32:54"},{"id":5,"slug":"dual-axis-solar-tracker-arduino-nano","title":"Dual-Axis Solar Tracker with Arduino Nano and 4 LDR Light Sensors","category":"Projects","excerpt":"Increase solar panel efficiency by up to 40% with dual servo motors, dynamic mathematical differential tracking, and automatic night reset.","content":"# Dual-Axis Solar Tracker Using Arduino Nano\n\nSolar panels generate maximum output when sunlight hits perpendicular to the panel's surface. In this project, we create a dual-axis pan-and-tilt tracking mechanism using two MG996R high-torque servos and four Light Dependent Resistors (LDRs).\n\n## Working Principle\nFour LDRs are separated by cross-shaped baffles:\n- **Top-Left (TL)**, **Top-Right (TR)**\n- **Bottom-Left (BL)**, **Bottom-Right (BR)**\n\nThe Arduino calculates:\n- Vertical error: `(TL + TR) - (BL + BR)`\n- Horizontal error: `(TL + BL) - (TR + BR)`\n\nIf the difference exceeds a deadband threshold, the servos adjust position until sunlight is balanced across all four quadrants.","cover_image":"https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=1200&q=80","tags":"projects, arduino, solar, robotics, green-energy","author":"Toshit Kumar","read_time":"6 min read","featured":0,"views":184,"created_at":"2026-10-14 07:32:54","updated_at":"2026-10-14 07:32:54"}],"initialStats":{"totalArticles":5,"totalViews":1140,"categories":[{"category":"AI","count":1},{"category":"Arduino","count":1},{"category":"Editing","count":1},{"category":"Electronics","count":1},{"category":"Projects","count":1}],"dbPath":"data/articles.db (SQLite Embedded)"}}],null],null],null]},[[[["$","link","0",{"rel":"stylesheet","href":"/toshit-tech-hub/_next/static/css/2c7d636ec0d09340.css","precedence":"next","crossOrigin":"$undefined"}]],["$","html",null,{"lang":"en","className":"dark scroll-smooth","children":["$","body",null,{"className":"__variable_866c20 __variable_1a0231 antialiased min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-white","children":[["$","$L6",null,{}],["$","main",null,{"className":"flex-1 w-full","children":["$","$L7",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":"404"}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],"notFoundStyles":[]}]}],["$","footer",null,{"className":"border-t border-slate-800/80 bg-slate-950 text-slate-400 py-12 mt-20","children":["$","div",null,{"className":"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8","children":[["$","div",null,{"className":"grid grid-cols-1 md:grid-cols-4 gap-8 mb-8","children":[["$","div",null,{"className":"md:col-span-2 space-y-4","children":[["$","div",null,{"className":"flex items-center gap-3","children":[["$","div",null,{"className":"w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center","children":["$","$L9",null,{"icon":{"name":"cpu","size":24,"node":[["path",{"d":"M12 20v2","key":"1lh1kg"}],["path",{"d":"M12 2v2","key":"tus03m"}],["path",{"d":"M17 20v2","key":"1rnc9c"}],["path",{"d":"M17 2v2","key":"11trls"}],["path",{"d":"M2 12h2","key":"1t8f8n"}],["path",{"d":"M2 17h2","key":"7oei6x"}],["path",{"d":"M2 7h2","key":"asdhe0"}],["path",{"d":"M20 12h2","key":"1q8mjw"}],["path",{"d":"M20 17h2","key":"1fpfkl"}],["path",{"d":"M20 7h2","key":"1o8tra"}],["path",{"d":"M7 20v2","key":"4gnj0m"}],["path",{"d":"M7 2v2","key":"1i4yhu"}],["rect",{"x":"4","y":"4","width":"16","height":"16","rx":"2","key":"1vbyd7"}],["rect",{"x":"8","y":"8","width":"8","height":"8","rx":"1","key":"z9xiuo"}]]},"className":"w-4 h-4 text-white"}]}],["$","span",null,{"className":"text-lg font-bold text-white font-mono tracking-wide","children":["TOSHIT",["$","span",null,{"className":"text-cyan-400","children":".TECH"}]]}]]}],["$","p",null,{"className":"text-sm text-slate-400 max-w-md leading-relaxed","children":["Curated engineering articles, hardware tutorials, microcontroller schematics, AI toolchains, and post-production workflows created by ",["$","strong",null,{"className":"text-slate-200","children":"Toshit Kumar"}],"."]}],["$","div",null,{"className":"flex items-center gap-3 pt-2","children":[["$","a",null,{"href":"https://www.youtube.com/@TechwithToshit","target":"_blank","rel":"noreferrer","className":"w-9 h-9 rounded-lg bg-slate-900 hover:bg-red-600/20 hover:text-red-400 border border-slate-800 flex items-center justify-center transition-all duration-200 text-slate-300","title":"YouTube - Tech with Toshit","children":["$","svg",null,{"className":"w-4 h-4","viewBox":"0 0 24 24","fill":"currentColor","children":["$","path",null,{"d":"M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"}]}]}],["$","a",null,{"href":"https://www.linkedin.com/in/toshit-kumar-a782901a7/","target":"_blank","rel":"noreferrer","className":"w-9 h-9 rounded-lg bg-slate-900 hover:bg-blue-600/20 hover:text-blue-400 border border-slate-800 flex items-center justify-center transition-all duration-200 text-slate-300","title":"Connect on LinkedIn","children":["$","svg",null,{"className":"w-4 h-4","viewBox":"0 0 24 24","fill":"currentColor","children":["$","path",null,{"d":"M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"}]}]}],["$","a",null,{"href":"https://github.com/toshitkumar","target":"_blank","rel":"noreferrer","className":"w-9 h-9 rounded-lg bg-slate-900 hover:bg-cyan-600/20 hover:text-cyan-400 border border-slate-800 flex items-center justify-center transition-all duration-200 text-slate-300","title":"GitHub Profile","children":["$","svg",null,{"className":"w-4 h-4","viewBox":"0 0 24 24","fill":"currentColor","children":["$","path",null,{"fillRule":"evenodd","clipRule":"evenodd","d":"M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"}]}]}]]}]]}],["$","div",null,{"children":[["$","h4",null,{"className":"text-sm font-semibold text-slate-200 uppercase tracking-wider font-mono mb-3","children":"Categories"}],["$","ul",null,{"className":"space-y-2 text-sm","children":[["$","li",null,{"children":["$","$La",null,{"href":"/?category=AI","className":"hover:text-cyan-400 transition-colors","children":"🤖 Artificial Intelligence"}]}],["$","li",null,{"children":["$","$La",null,{"href":"/?category=Arduino","className":"hover:text-cyan-400 transition-colors","children":"🕹️ Arduino & Microcontrollers"}]}],["$","li",null,{"children":["$","$La",null,{"href":"/?category=Electronics","className":"hover:text-cyan-400 transition-colors","children":"⚡ Electronics & PCB Design"}]}],["$","li",null,{"children":["$","$La",null,{"href":"/?category=Editing","className":"hover:text-cyan-400 transition-colors","children":"🎬 Video & Audio Editing"}]}],["$","li",null,{"children":["$","$La",null,{"href":"/?category=Projects","className":"hover:text-cyan-400 transition-colors","children":"🚀 Hands-On Projects"}]}]]}]]}],["$","div",null,{"children":[["$","h4",null,{"className":"text-sm font-semibold text-slate-200 uppercase tracking-wider font-mono mb-3","children":"Database Architecture"}],["$","div",null,{"className":"p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 text-xs","children":[["$","div",null,{"className":"flex items-center gap-2 text-emerald-400 font-mono font-semibold","children":[["$","$L9",null,{"icon":{"name":"database","size":24,"node":[["ellipse",{"cx":"12","cy":"5","rx":"9","ry":"3","key":"msslwz"}],["path",{"d":"M3 5V19A9 3 0 0 0 21 19V5","key":"1wlel7"}],["path",{"d":"M3 12A9 3 0 0 0 21 12","key":"mv7ke4"}]]},"className":"w-3.5 h-3.5"}],["$","span",null,{"children":"Isolated SQLite Engine"}]]}],["$","p",null,{"className":"text-slate-400 leading-normal","children":["All articles, tags, and metrics are stored in a standalone local database (",["$","code",null,{"className":"text-cyan-300 font-mono","children":"data/articles.db"}],")."]}],["$","div",null,{"className":"pt-1 text-[11px] text-slate-500 font-mono","children":"WAL mode enabled • Zero cloud bills"}]]}]]}]]}],["$","div",null,{"className":"pt-8 mt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4","children":[["$","p",null,{"children":["© ",2026," Toshit Kumar. Built with Next.js & SQLite."]}],["$","div",null,{"className":"flex items-center gap-1","children":[["$","span",null,{"children":"Crafted for makers & engineers with"}],["$","$L9",null,{"icon":{"name":"heart","size":24,"node":[["path",{"d":"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5","key":"mvr1a0"}]]},"className":"w-3.5 h-3.5 text-rose-500 inline fill-rose-500"}]]}]]}]]}]}]]}]}]],null],null],["$Lb",null]]]]
+b:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"Toshit.Tech — Engineering, AI, Arduino & Creative Media"}],["$","meta","3",{"name":"description","content":"Technical articles, schematics, AI experiments, code snippets, and creative editing workflows by Toshit Kumar."}],["$","link","4",{"rel":"icon","href":"/toshit-tech-hub/favicon.ico","type":"image/x-icon","sizes":"16x16"}]]
+1:null
