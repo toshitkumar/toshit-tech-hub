@@ -19,7 +19,12 @@ interface ArticlePageProps {
   };
 }
 
-export const dynamic = 'force-dynamic';
+export async function generateStaticParams() {
+  const articles = getArticles();
+  return articles.map((article) => ({
+    slug: article.slug,
+  }));
+}
 
 export async function generateMetadata({ params }: ArticlePageProps) {
   const article = getArticleBySlug(params.slug);
